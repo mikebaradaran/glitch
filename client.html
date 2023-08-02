@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Student</title>
+</head>
+
+<body>
+    Name:<input type="text" id="stuName">
+    Message:<input type="text" id="stuMessage">
+    <button onclick=sendData()>post</button>
+
+    <div id="output"></div>
+
+    <script>
+        const txtName = document.getElementById('stuName');
+        const txtMessage = document.getElementById('stuMessage');
+        const outputDiv = document.getElementById('output');
+        const serverURL = 'http://localhost:4000';
+        
+        function sendData() {
+            fetch(serverURL + '/api/data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({name: txtName.value, message:txtMessage.value})
+            }).then(response => response.json())
+                .then(data => {
+                    outputDiv.innerHTML = `Data sent:${data.message}`;
+                })
+                .catch(error => {
+                    outputDiv.innerHTML = 'Error:' + error;
+                });
+        }
+    </script>
+</body>
+</html>

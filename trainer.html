@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Trainer</title>
+</head>
+
+<body>
+  <button onclick="sendCommand('/api/wipe')">clear messages</button>
+  <button onclick="sendCommand('/api/kill')">Kill class!</button>
+  <button onclick="getDataFromServer()">get data</button>
+  <div id="output"></div>
+
+  <script>
+    const serverURL = 'http://localhost:4000';
+    const outputDiv = document.getElementById('output');
+
+    function getDataFromServer() {
+      fetch(serverURL + '/api/get')
+        .then(response => response.json())
+        .then(data => {
+          display(data.data);
+        })
+        .catch(error => { alert('Error:', error); });
+    }
+
+    function display(data) {
+      let html = '<ul>';
+      data.forEach(item => {
+        html += `<li>${item.name} : ${item.message}</li>`;
+      });
+      document.getElementById('output').innerHTML = html + '</ul>';
+    }
+
+    function sendCommand(command) {
+      fetch(serverURL + command, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => response.json())
+        .then(data => {
+          outputDiv.innerHTML = `Command sent:${data.message}`;
+        })
+        .catch(error => {
+          outputDiv.innerHTML =('Error:' + error);
+        });
+    }
+
+  </script>
+</body>
+
+</html>
