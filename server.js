@@ -2,23 +2,21 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
-app.use(cors());
 
+app.use(cors());
 app.use(bodyParser.json());
 
 let data = [];
 const PORT = 4000; // You can change this to any available port
 
-// POST endpoint to receive data
+app.get('/api/get', (req, res) => {
+    res.json({ data });
+});
+
 app.post('/api/data', (req, res) => {
     const newData = req.body;
     data.push(newData);
     res.status(201).json({ message: 'Data received successfully', data: newData });
-});
-
-// GET endpoint to retrieve all data
-app.get('/api/get', (req, res) => {
-    res.json({ data });
 });
 
 app.post('/api/kill', (req, res) => {
